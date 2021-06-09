@@ -54,7 +54,7 @@ Vagrant.configure("2") do |config|
             systemctl start libvirtd
             systemctl enable libvirtd
 
-            yum localinstall -y -q --nogpgcheck /tmp/openvswitch-2.15.0-1.x86_64.rpm
+            yum localinstall -y -q --nogpgcheck https://github.com/aesirteam/openvswitch-demo/releases/download/v1.0.0/openvswitch-2.15.0-1.x86_64.rpm
             /etc/rc.d/init.d/openvswitch start
             /sbin/chkconfig openvswitch on
 
