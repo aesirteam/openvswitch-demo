@@ -59,6 +59,10 @@ Vagrant.configure("2") do |config|
             /sbin/chkconfig openvswitch on
 
             echo -en "
+            LANG=en_US.UTF-8
+            LC_ALL=" | sed 's/[[:space:]]//g' > /etc/environment
+
+            echo -en "
             ONBOOT=yes
             USERCTL=yes
             PEERDNS=yes
