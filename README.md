@@ -87,7 +87,7 @@ f14f0abb-6128-43ef-97ec-991e45e19e4f
             Interface vnet1
     ovs_version: "2.15.0"
 ```
-<b>注: 若br-int存在vnet0(tap设备)并且tag=1,则允许从qvo85588576d-0(veth设备)提供的dhcp动态分配地址</b>
+<b>注: 若br-int的vnet0(tap设备)tag=1,则可以从br-int的vlan=1提供dhcp服务动态获取地址</b>
 - **实验环境中连接VM实例并验证外网连通**
 ```
 [vagrant@server1 ~]$ sudo virsh console vm1
