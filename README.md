@@ -37,7 +37,8 @@ zhongkui:~$ vagrant ssh server1
 [vagrant@server1 ~]$ sudo ./00-mutil-tenant-with-simple-server.sh
 ```
 - **查看实验环境的ovs bridge详情**
-![ovs-demo1](https://user-images.githubusercontent.com/5821532/121350274-0b150300-c95d-11eb-95e6-73e1940a0fe5.png)
+![ovs-demo](https://user-images.githubusercontent.com/5821532/122399156-1f847b80-cfad-11eb-9ee7-0b0afb53980a.png)
+
 
 ```
 [vagrant@server1 ~]$ sudo ovs-vsctl show
