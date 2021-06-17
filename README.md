@@ -43,12 +43,12 @@ zhongkui:~$ vagrant ssh server1
 [vagrant@server1 ~]$ sudo ovs-vsctl show
 f14f0abb-6128-43ef-97ec-991e45e19e4f
     Bridge br-ex
-        Port qvo85588576d-1
-            Interface qvo85588576d-1
+        Port veth-85588576d
+            Interface veth-85588576d
         Port eth1
             Interface eth1
-        Port qvo1ba3ab31-1
-            Interface qvo1ba3ab31-1
+        Port veth-1ba3ab31
+            Interface veth-1ba3ab31
         Port br-ex
             Interface br-ex
                 type: internal
@@ -56,27 +56,22 @@ f14f0abb-6128-43ef-97ec-991e45e19e4f
         Port br-int
             Interface br-int
                 type: internal
-        Port qvo1ba3ab31-0
-            tag: 2
-            Interface qvo1ba3ab31-0
-        Port qvo85588576d-0
-            tag: 1
-            Interface qvo85588576d-0
     ovs_version: "2.15.0"
 ```
 - **实验环境中创建租户VM实例并桥接至br-int**
 ```
 Usage: ./install_vm.sh [vm名称] [vlan tag编号]
 [vagrant@server1 ~]$ sudo ./install_vm.sh vm1 1
+[vagrant@server1 ~]$ sudo ./install_vm.sh vm2 2
 [vagrant@server1 ~]$ sudo ovs-vsctl show
 f14f0abb-6128-43ef-97ec-991e45e19e4f
     Bridge br-ex
-        Port qvo85588576d-1
-            Interface qvo85588576d-1
+        Port veth-85588576d
+            Interface veth-85588576d
         Port eth1
             Interface eth1
-        Port qvo1ba3ab31-1
-            Interface qvo1ba3ab31-1
+        Port veth-1ba3ab31
+            Interface veth-1ba3ab31
         Port br-ex
             Interface br-ex
                 type: internal
@@ -84,15 +79,12 @@ f14f0abb-6128-43ef-97ec-991e45e19e4f
         Port br-int
             Interface br-int
                 type: internal
-        Port qvo1ba3ab31-0
-            tag: 2
-            Interface qvo1ba3ab31-0
         Port vnet0 
             tag: 1
             Interface vnet0
-        Port qvo85588576d-0
-            tag: 1
-            Interface qvo85588576d-0
+        Port vnet1 
+            tag: 2
+            Interface vnet1
     ovs_version: "2.15.0"
 ```
 <b>注: 若br-int存在vnet0(tap设备)并且tag=1,则允许从qvo85588576d-0(veth设备)提供的dhcp动态分配地址</b>
