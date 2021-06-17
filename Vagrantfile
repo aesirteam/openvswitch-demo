@@ -45,6 +45,10 @@ Vagrant.configure("2") do |config|
         end
 
         srv.vm.provision :shell, inline: <<-SHELL
+            echo -en "
+            LANG=en_US.UTF-8
+            LC_ALL=" | sed 's/[[:space:]]//g' > /etc/environment
+
             sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
             systemctl restart sshd
 
@@ -57,11 +61,7 @@ Vagrant.configure("2") do |config|
             yum localinstall -y -q --nogpgcheck https://github.com/aesirteam/openvswitch-demo/releases/download/v1.0.0/openvswitch-2.15.0-1.x86_64.rpm
             /etc/rc.d/init.d/openvswitch start
             /sbin/chkconfig openvswitch on
-
-            echo -en "
-            LANG=en_US.UTF-8
-            LC_ALL=" | sed 's/[[:space:]]//g' > /etc/environment
-
+            
             echo -en "
             ONBOOT=yes
             USERCTL=yes
@@ -74,6 +74,13 @@ Vagrant.configure("2") do |config|
             OVSDHCPINTERFACES=eth1" | sed 's/[[:space:]]//g' > /etc/sysconfig/network-scripts/ifcfg-br-ex
 
             echo -en "
+            ONBOOT=yes
+            DEVICE=br-int
+            DEVICETYPE=ovs
+            OVSBOOTPROTO=none
+            TYPE=OVSBridge" | sed 's/[[:space:]]//g' > /etc/sysconfig/network-scripts/ifcfg-br-int
+
+            echo -en "
             DEVICE=eth1
             DEVICETYPE=ovs
             TYPE=OVSPort
@@ -83,6 +90,17 @@ Vagrant.configure("2") do |config|
 
             systemctl restart network
         SHELL
+
+        # srv.vm.provision :shell, inline: <<-SHELL
+        #     brctl addbr br-ex
+        #     brctl addif br-ex eth1
+        #     ip link set br-ex up
+            
+        #     addr=$(hostname -I | cut -d" " -f2)
+        #     ifconfig eth1 inet 0
+        #     ip addr add $addr/16 dev br-ex
+        #     route add default gw 10.240.0.1 dev br-ex
+        # SHELL
     end
   end
 end
