@@ -40,17 +40,17 @@ for n in "85588576d" "1ba3ab31"; do
   fi
   
   # 创建租户内部与外部的网络连通，为vm提供nat转发服务
-  if [ ! -d /sys/devices/virtual/net/qbr-$n ]; then
+  if [ ! -d /sys/devices/virtual/net/veth-$n ]; then
     # 创建veth pair设备并加入netns
-    ip link add eth1-$n  netns ns-$n type veth peer name qbr-$n
-    ip netns exec ns-$n ip link set eth1-$n up
-    ip link set qbr-$n up
+    ip link add eth1-$n  netns ns-$n type veth peer name veth-$n
+    ip netns exec ns-$n ip link set eth1-$n name eth1 up
+    ip link set veth-$n up
 
-    # qbr-XXX端加入ovs的br-ex网桥 
-    ovs-vsctl add-port br-ex qbr-$n
+    # veth-XXX端加入ovs的br-ex网桥 
+    ovs-vsctl add-port br-ex veth-$n
     
     # eth1-XXX端通过上游dhcp服务获取动态地址，实现外网连通
-    ip netns exec ns-$n /sbin/dhclient -q --no-pid -lf /var/lib/dhclient/dhclient--qbr-$n.lease  eth1-$n
+    ip netns exec ns-$n /sbin/dhclient -q --no-pid -lf /var/lib/dhclient/dhclient--qbr-$n.lease  eth1
 
     # 开启网络命名空间下IP转发功能
     ip netns exec ns-$n sysctl -w net.ipv4.ip_forward=1 > /dev/null
